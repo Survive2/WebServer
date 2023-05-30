@@ -38,7 +38,7 @@ public:
 class MutexLockGuard
 {
     private:
-    MutexLock& _lock;
+    MutexLock &_lock;
     public:
     MutexLockGuard(MutexLock& _mutex) : _lock(_mutex){
         _lock.lock();

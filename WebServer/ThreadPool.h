@@ -11,25 +11,25 @@ using namespace std;
 
 class ThreadPool{
 public:
-    enum quitMode{ WORKDONE, FORCEQUIT};
-    ThreadPool(size_t threadNum,quitMode quit = WORKDONE,size_t maxSize=-1);
+    enum quitMode {WORKDONE,FORCEQUIT};
+    ThreadPool(size_t threadNum,size_t maxSize,quitMode quit);
     ~ThreadPool();
-    bool addTask(void (*function)(void*), void* args);
-    static void* executeTask(void* args);
+    bool addTask(void (*function)(void*),void* args);
+    static void* executeTask(void * args);
 private:
     MutexLock _thread_lock;
     Condition _thread_cond;
-    class ThreadPoolTask{
-    public:
+    struct ThreadTask
+    {
         void (*function)(void*);
-        void* _args;
+        void *args;
     };
-    size_t _maxSize;
-    vector<pthread_t> threads;
-    queue<ThreadPoolTask> task_queue;
-    quitMode _quit;
-    size_t _threadNum;
-};
 
+    queue<ThreadTask> task_queue;
+    vector<pthread_t> threads;
+    size_t _threadNum;
+    size_t _maxSize;
+    quitMode _quit;
+};
 
 #endif
